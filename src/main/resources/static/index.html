@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oblig 3</title>
+</head>
+<!-- Bootstrap CSS only -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+<style>
+    .table-container{
+        width: 45%;
+        float: left;
+    }
+    .kontainer{
+        float: right;
+        width: 55%;
+    }
+    .feilmelding{
+        color: red;
+    }
+    #tabell_Kontainer{
+        width: 80%;
+    }
+</style>
+<body>
+    <h1>bestilling av kinobilletter p2</h1>
+    <div class="table-container">
+        <table class="table table-borderless table-sm table-hover">
+            <tr>
+                <td>Velg Film</td>
+                <td>
+                    <select id="innFilm" name="filmer">
+                        <option value="Velg film her"> Velg film her </option>
+                        <option> Film 1 </option>
+                        <option> Film 2 </option>
+                        <option> Film 3 </option>
+                    </select>
+                </td>
+                <td><span id="tomFilm" class="feilmelding"></span></td>
+            </tr>
+            <tr>
+                <td>Antall</td>
+                <td><input type="number" id="innAntall" min="1" max="99"></td>
+                <td><span class="feilmelding" id="tomAntall"></span></td>
+            </tr>
+            <tr>
+                <td>Fornavn</td>
+                <td><input id="innFornavn"></td>
+                <td><span class="feilmelding" id="tomFornavn"></span></td>
+            </tr>
+            <tr>
+                <td>Etternavn</td>
+                <td><input id="innEtternavn"></td>
+                <td><span class="feilmelding" id="tomEtternavn"></span></td>
+            </tr>
+            <tr>
+                <td>Telefon Nummer</td>
+                <td><input id="innTelefonNr"></td>
+                <td><span class="feilmelding" id="tomTelefonNr"></span></td>
+            </tr>
+            <tr>
+                <td>Epost</td>
+                <td><input id="innEmail"></td>
+                <td><span class="feilmelding" id="tomEmail"></span></td>
+            </tr>
+        </table>
+
+        <button type="button" onclick="registrerbilett()" class="btn btn-outline-primary"> Kjøp bilett </button>
+        <button onclick="hentAlle()" class="btn btn-outline-secondary"> Vis alle </button>
+    </div>
+
+    <div class="kontainer">
+        <h3 id="info"> Alle biletter </h3>
+        <button onclick="slettData()" type="button" class="btn btn-danger"> Slett alle bilettene </button>
+        <div id="tabell_Kontainer"></div>
+    </div>
+
+
+    <script>
+        function registrerbilett(){
+            const film = $("#innFilm").val();
+            const antall = $("#innAntall").val();
+            const fornavn = $("#innFornavn").val();
+            const etternavn = $("#innEtternavn").val();
+            const telefonNr = $("#innTelefonNr").val();
+            const email = $("#innEmail").val();
+
+
+            const feilM_film =  $("#tomFilm");
+            const feilM_antall = $("#tomAntall");
+            const feilM_fornavn = $("#tomFornavn");
+            const feilM_etternavn = $("#tomEtternavn");
+            const feilM_telefonNr = $("#tomTelefonNr");
+            const feilM_email = $("#tomEmail");
+
+            //sjekker om alle inputene er fylt
+            let fylt_film = true;
+            let fylt_antall = true;
+            let fylt_fornavn = true;
+            let fylt_etternavn = true;
+            let fylt_telefonNr = true;
+            let fylt_email = true;
+
+            //sjekker om alle felte er fylt
+            if(film == "Velg film her"){
+                feilM_film.html("Vennligst velg et film");
+                fylt_film = false;
+            }else{feilM_film.html("")}
+
+            if(antall<=0 || antall==""){
+                feilM_antall.html("Vennligst velg riktig antall");
+                fylt_antall = false;
+            }else{feilM_antall.html("")}
+
+            if(fornavn==""){
+                feilM_fornavn.html("Vennligst skriv inn fornavn");
+                fylt_fornavn = false;
+            }else{feilM_fornavn.html("")}
+
+            if(etternavn==""){
+                feilM_etternavn.html("Vennligst skriv inn etternavn");
+                fylt_etternavn = false;
+            }else{feilM_etternavn.html("")}
+
+            if(telefonNr==""){
+                feilM_telefonNr.html("Vennligst skriv inn telefon nummer");
+                fylt_telefonNr = false;
+            }else{feilM_telefonNr.html("")}
+
+            if(email==""){
+                feilM_email.html("Vennligst skriv inn email");
+                fylt_email = false;
+            }else{feilM_email.html("")}
+
+            //denne koden kjøre bare hvis alle feltene har gyldige verdier
+            if(fylt_film && fylt_antall && fylt_fornavn && fylt_etternavn && fylt_telefonNr && fylt_email) {
+                let bestilling = {
+                    film: film,
+                    antall: antall,
+                    fornavn: fornavn,
+                    etternavn: etternavn,
+                    telefonNr: telefonNr,
+                    email: email,
+                };
+
+                //sender bestillingen som et objekt til serveren
+                $.post("/lagre", bestilling, function (){
+                    hentAlle();
+                 });
+
+                //tømmer alle inputfeltene
+                $("#innFilm").val("Velg film her");
+                $("#innAntall").val("");
+                $("#innFornavn").val("");
+                $("#innEtternavn").val("");
+                $("#innTelefonNr").val("");
+                $("#innEmail").val("");
+            }
+        }
+
+        const hentAlle = () => {
+            $.get("/hent",function(data){
+                formaterData(data);
+            });
+        }
+
+        const formaterData = bestillinger => {
+            let ut = "";
+            ut += "<table class='table table-bordered table-striped'>";
+            ut += "<tr>" +
+                    "<th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Email</th><th>Telefon Nr</th>" +
+                  "</tr>";
+            for(let enBestilling of bestillinger) {
+                ut += "<tr>" +
+                            "<td>" + enBestilling.film + "</td>" +
+                            "<td>" + enBestilling.antall + "</td>" +
+                            "<td>" + enBestilling.fornavn + " </td>" +
+                            "<td>" + enBestilling.etternavn + "</td>" +
+                            "<td>" + enBestilling.email + "</td>" +
+                            "<td>" + enBestilling.telefonNr + "</td>"+
+                       "</tr>"
+            }
+            ut += "</table>";
+            $("#tabell_Kontainer").html(ut);
+        }
+
+        const slettData = () =>{
+            $.ajax({
+                url: "/slett",
+                type: "DELETE",
+                success:function(){
+                    $("#tabell_kontainer").html("");
+                    console.log("alt er sletta nå...")
+                    hentAlle()}
+            });
+        }
+    </script>
+</body>
+</html>
