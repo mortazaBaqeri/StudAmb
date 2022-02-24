@@ -2,80 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Oblig 3</title>
+    <title>Bestilling av kinobilletter</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap CSS only -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
-<!-- Bootstrap CSS only -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-<style>
-    .table-container{
-        width: 45%;
-        float: left;
-    }
-    .kontainer{
-        float: right;
-        width: 55%;
-    }
-    .feilmelding{
-        color: red;
-    }
-    #tabell_Kontainer{
-        width: 80%;
-    }
-</style>
 <body>
-    <h1>bestilling av kinobilletter p2</h1>
+<div class="style-container">
+    <h1>Bestilling av kinobilletter</h1>
     <div class="table-container">
         <table class="table table-borderless table-sm table-hover">
-            <tr>
-                <td>Velg Film</td>
-                <td>
-                    <select id="innFilm" name="filmer">
-                        <option value="Velg film her"> Velg film her </option>
-                        <option> Film 1 </option>
-                        <option> Film 2 </option>
-                        <option> Film 3 </option>
-                    </select>
-                </td>
-                <td><span id="tomFilm" class="feilmelding"></span></td>
-            </tr>
-            <tr>
-                <td>Antall</td>
-                <td><input type="number" id="innAntall" min="1" max="99"></td>
-                <td><span class="feilmelding" id="tomAntall"></span></td>
-            </tr>
-            <tr>
-                <td>Fornavn</td>
-                <td><input id="innFornavn"></td>
-                <td><span class="feilmelding" id="tomFornavn"></span></td>
-            </tr>
-            <tr>
-                <td>Etternavn</td>
-                <td><input id="innEtternavn"></td>
-                <td><span class="feilmelding" id="tomEtternavn"></span></td>
-            </tr>
-            <tr>
-                <td>Telefon Nummer</td>
-                <td><input id="innTelefonNr"></td>
-                <td><span class="feilmelding" id="tomTelefonNr"></span></td>
-            </tr>
-            <tr>
-                <td>Epost</td>
-                <td><input id="innEmail"></td>
-                <td><span class="feilmelding" id="tomEmail"></span></td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td><label>Velg film:</label></td>
+                    <td><select id="innFilm" name="filmer">
+                        <option value="Velg film her">Velg film her</option>
+                        <option>Film 1</option>
+                        <option>Film 2</option>
+                        <option>Film 3</option>
+                        <option>Film 4</option>
+                    </select></td>
+                    <td><span id="tomFilm" class="feilmelding"></span></td>
+                    <br><br>
+
+                </tr>
+                <tr>
+                    <td><label>Antall:</label></td>
+                    <td><input type="number" id="antallBilletter" min="1" max="99"></td>
+                    <td><span class="feilmelding" id="tomAntall"></span></td>
+                </tr>
+                <tr>
+                    <td><label>Fornavn:</label></td>
+                    <td><input type="text" id="innFornavn"></td>
+                    <td><span class="feilmelding" id="tomFornavn"></span></td>
+                </tr>
+                <tr>
+                    <td><label>Etternavn:</label></td>
+                    <td><input type="text" id="innEtternavn"></td>
+                    <td><span class="feilmelding" id="tomEtternavn"></span></td>
+                </tr>
+                <tr>
+                    <td><label>TelefonNo.:</label></td>
+                    <td><input type="number" id="innTelefonNr"></td>
+                    <td><span class="feilmelding" id="tomTelefonNr"></span></td>
+                </tr>
+                <tr>
+                    <td><label>Epost:</label></td>
+                    <td><input type="text" id="innEmail"></td>
+                    <td><span class="feilmelding" id="tomEmail"></span></td>
+                </tr>
+            </tbody>
         </table>
-
-        <button type="button" onclick="registrerbilett()" class="btn btn-outline-primary"> Kjøp bilett </button>
-        <button onclick="hentAlle()" class="btn btn-outline-secondary"> Vis alle </button>
     </div>
 
-    <div class="kontainer">
-        <h3 id="info"> Alle biletter </h3>
-        <button onclick="slettData()" type="button" class="btn btn-danger"> Slett alle bilettene </button>
+    <div class="knapp-kontainder">
+        <button type="button" class="btn btn-outline-success" onclick="registrerbilett()">Kjøp billett</button>
+        <br><br><br>
+
+        <h2>Alle billetter</h2>
         <div id="tabell_Kontainer"></div>
-    </div>
+        <br><br><br>
 
+        <button type="button" class="btn btn-outline-danger" onclick="slettData()">Slett alle billettene</button>
+        <br><br><br>
+
+        <button type="button" class="btn btn-outline-primary" onclick="hentAlle()">Vis alle billettene</button>
+        <br><br><br>
+    </div>
+</div>
 
     <script>
         function registrerbilett(){
@@ -144,6 +140,8 @@
                     email: email,
                 };
 
+                console.log("vi kommer oss videre")
+
                 //sender bestillingen som et objekt til serveren
                 $.post("/lagre", bestilling, function (){
                     hentAlle();
@@ -190,9 +188,9 @@
                 url: "/slett",
                 type: "DELETE",
                 success:function(){
-                    $("#tabell_kontainer").html("");
+                    $("#tabell_Kontainer").html("");
                     console.log("alt er sletta nå...")
-                    hentAlle()}
+                }
             });
         }
     </script>
